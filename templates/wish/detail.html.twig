@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="row align-items-center justify-content-center m-5">
+        <div class="col-4 card">
+            <div class="card-body">
+                <h5 class="card-title">{{ wish.title }}</h5>
+                <p class="card-text">{{ wish.description }}</p>
+                <p class="card-text">{{ wish.author }}</p>
+                <p class="card-text">{{ wish.createdAt | date('Y-m-d') }}</p>
+                <p class="card-text">{{ wish.isPublished }}</p>
+                <p class="card-text">{{ category }}</p>
+                <a href="{{ path('edit', { 'id' : wish.id }) }}" class="btn btn-warning">
+                    <i class="fa fa-pen"></i>
+                </a>
+                <a href="{{ path('delete', { 'id' : wish.id }) }}" class="btn btn-danger">
+                    <i class="fa fa-trash"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

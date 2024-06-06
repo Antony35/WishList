@@ -1,0 +1,12 @@
+@import "~bootstrap/scss/bootstrap";
+
+body {
+  background-color: #161649;
+  color: white;
+}
+
+.logo {
+  width: 40px;
+  filter: invert(100%) sepia(100%) saturate(13%) hue-rotate(237deg)
+  brightness(104%) contrast(104%);
+}

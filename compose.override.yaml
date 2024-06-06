@@ -5,6 +5,8 @@ services:
   database:
     ports:
       - "5432"
+    networks:
+        - cluster
 ###< doctrine/doctrine-bundle ###
 
 ###> symfony/mailer ###
@@ -17,3 +19,17 @@ services:
       MP_SMTP_AUTH_ACCEPT_ANY: 1
       MP_SMTP_AUTH_ALLOW_INSECURE: 1
 ###< symfony/mailer ###
+
+  adminer:
+    image: adminer:latest
+    container_name: adminer
+    restart: no
+    ports:
+      - "9999:8080"
+    networks:
+      - cluster
+
+networks:
+  cluster:
+    external: false
+
