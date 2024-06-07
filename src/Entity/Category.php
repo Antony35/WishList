@@ -18,6 +18,17 @@ class Category
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    /**
+     * @var Collection<int, Wish>
+     */
+    #[ORM\OneToMany(targetEntity: Wish::class, mappedBy: 'category')]
+    private Collection $wishes;
+
+    public function __construct()
+    {
+        $this->wishes = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -31,6 +42,36 @@ class Category
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Wish>
+     */
+    public function getWishes(): Collection
+    {
+        return $this->wishes;
+    }
+
+    public function addWish(Wish $wish): static
+    {
+        if (!$this->wishes->contains($wish)) {
+            $this->wishes->add($wish);
+            $wish->setCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWish(Wish $wish): static
+    {
+        if ($this->wishes->removeElement($wish)) {
+            // set the owning side to null (unless already changed)
+            if ($wish->getCategory() === $this) {
+                $wish->setCategory(null);
+            }
+        }
 
         return $this;
     }
