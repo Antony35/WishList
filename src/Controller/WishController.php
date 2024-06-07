@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Wish;
 use App\Form\WishType;
 use App\Repository\WishRepository;
@@ -24,7 +25,7 @@ class WishController extends AbstractController
     }
 
     #[Route('/', name: 'list')]
-    #[Template('wish/index.html.twig')]
+    #[Template('wish/user_list.html.twig')]
     public function list(): array
     {
         $wishes = $this->wishRepository->findAll();
@@ -51,7 +52,10 @@ class WishController extends AbstractController
     {
         $wish = new Wish();
 
-        $form = $this->createForm(WishType::class, $wish);
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $form = $this->createForm(WishType::class, $wish, ['username' => $user->getUsername()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $wish->setCreatedAt(new \DateTimeImmutable());

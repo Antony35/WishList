@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Category;
 use App\Entity\Wish;
+use Doctrine\DBAL\Types\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -17,7 +18,9 @@ class WishType extends AbstractType
         $builder
             ->add('title')
             ->add('description')
-            ->add('author')
+            ->add('author', null, [
+                'attr' => ['value' => $options['username']],
+            ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'name',
@@ -31,6 +34,9 @@ class WishType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Wish::class,
+            'username' => ''
         ]);
+
+        $resolver->addAllowedTypes('username', ['string']);
     }
 }

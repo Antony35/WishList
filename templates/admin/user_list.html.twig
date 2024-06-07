@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User list{% endblock %}
+
+{% block body %}
+    <div class="row d-flex align-items-center justify-content-center">
+        <div class="col-8 p-5 d-flex flex-column">
+            <a href="{{ path('admin_add_user') }}" class="btn btn-info text-center m-3 align-self-center">Create a new user</a>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Username</th>
+                    <th class="text-center">Role</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.username }}</td>
+                        <td class="text-center">
+                            {% for role in user.roles %}
+                                {{ role }}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

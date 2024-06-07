@@ -15,7 +15,6 @@ class HomeController extends AbstractController
     public function home(): array
     {
         return[
-
         ];
     }
 

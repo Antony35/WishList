@@ -24,7 +24,7 @@ class VIPController extends AbstractController
 //    }
 //
 //    #[Route('/', name: 'home')]
-//    #[Template('vip/index.html.twig')]
+//    #[Template('vip/user_list.html.twig')]
 //    public function index(Request $request): Response|array
 //    {
 //        $peoples = $this->peopleRepository->findAll();
