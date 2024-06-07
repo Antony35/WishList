@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Wish;
 use App\Form\WishType;
 use App\Repository\WishRepository;
-use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Attribute\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,45 +12,25 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+#[Route('/wish', name: 'wish_')]
+
 class WishController extends AbstractController
 {
-
     public function __construct(
-        private EntityManagerInterface $entityManager,
-        private readonly WishRepository $wishRepository,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly WishRepository         $wishRepository,
     )
     {
     }
 
-    #[Route('/', name: 'home')]
+    #[Route('/', name: 'list')]
     #[Template('wish/index.html.twig')]
-    public function index(): array
+    public function list(): array
     {
         $wishes = $this->wishRepository->findAll();
 
         return [
             'wishes' => $wishes
-         ];
-    }
-
-    #[Route('/create', name: 'create')]
-    #[Template('wish/form.html.twig')]
-    public function create(Request $request): Response | array
-    {
-        $wish = new Wish();
-
-        $form = $this->createForm(WishType::class, $wish);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $wish->setCreatedAt(new \DateTimeImmutable());
-            $this->entityManager->persist($wish);
-            $this->entityManager->flush();
-
-            return $this->redirectToRoute('home');
-        }
-
-        return [
-            'form' => $form
         ];
     }
 
@@ -66,6 +45,27 @@ class WishController extends AbstractController
         ];
     }
 
+    #[Route('/add', name: 'add')]
+    #[Template('wish/form.html.twig')]
+    public function create(Request $request): Response | array
+    {
+        $wish = new Wish();
+
+        $form = $this->createForm(WishType::class, $wish);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $wish->setCreatedAt(new \DateTimeImmutable());
+            $this->entityManager->persist($wish);
+            $this->entityManager->flush();
+
+            return $this->redirectToRoute('wish_list');
+        }
+
+        return [
+            'form' => $form
+        ];
+    }
+
     #[Route('/edit/{id}', name: 'edit')]
     #[Template('wish/form.html.twig')]
     public function edit(Wish $wish, Request $request): Response | array
@@ -77,7 +77,7 @@ class WishController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->persist($wish);
             $this->entityManager->flush();
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('wish_detail', ['id' => $wish->getId()]);
         }
 
         return [
@@ -91,6 +91,6 @@ class WishController extends AbstractController
         $this->entityManager->remove($wish);
         $this->entityManager->flush();
 
-        return $this->redirectToRoute('home');
+        return $this->redirectToRoute('wish_list');
     }
 }

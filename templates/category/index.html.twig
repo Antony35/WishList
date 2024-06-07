@@ -3,10 +3,9 @@
 {% block title %}Category index{% endblock %}
 
 {% block body %}
-    <h1>Category index</h1>
-
     <div class="row d-flex justify-content-center align-items-center">
         <div class="col-4">
+        <h5>Category list</h5>
             <table class="col-5 table table-striped">
                 <thead>
                 <tr>
@@ -23,15 +22,15 @@
                         <td>{{ category.id }}</td>
                         <td>{{ category.name }}</td>
                         <td>
-                            <a href="{{ path('app_category_show', {'id': category.id}) }}" class="btn btn-info"><i
+                            <a href="{{ path('category_show', {'id': category.id}) }}" class="btn btn-info"><i
                                         class="fa fa-info"></i></a>
                         </td>
                         <td>
-                            <a href="{{ path('app_category_edit', {'id': category.id}) }}" class="btn btn-warning"><i
+                            <a href="{{ path('category_edit', {'id': category.id}) }}" class="btn btn-warning"><i
                                         class="fa fa-pen"></i></a>
                         </td>
                         <td>
-                            <a href="{{ path('app_category_delete', {'id': category.id}) }}" class="btn btn-danger"><i
+                            <a href="{{ path('category_delete', {'id': category.id}) }}" class="btn btn-danger"><i
                                         class="fa fa-trash"></i></a>
                         </td>
                     </tr>
@@ -42,7 +41,8 @@
                 {% endfor %}
                 </tbody>
             </table>
-            <a href="{{ path('app_category_new') }}" class="btn btn-success ms-5">Create new</a>
+            <a href="{{ path('category_add') }}" class="btn btn-success ms-5">Create new</a>
         </div>
     </div>
+
 {% endblock %}

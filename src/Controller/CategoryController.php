@@ -12,10 +12,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/admin')]
+#[Route('/category', name: 'category_')]
 class CategoryController extends AbstractController
 {
-    #[Route('/', name: 'app_category_index', methods: ['GET'])]
+    #[Route('/', name: 'list')]
+
     public function index(CategoryRepository $categoryRepository): Response
     {
         return $this->render('category/index.html.twig', [
@@ -23,7 +24,7 @@ class CategoryController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_category_new', methods: ['GET', 'POST'])]
+    #[Route('/add', name: 'add')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $category = new Category();
@@ -34,27 +35,24 @@ class CategoryController extends AbstractController
             $entityManager->persist($category);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('category_list', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->render('category/new.html.twig', [
+        return $this->render('category/form.html.twig', [
             'category' => $category,
             'form' => $form,
         ]);
     }
 
-    #[Route('/show/{id}', name: 'app_category_show', methods: ['GET'])]
+    #[Route('/show/{id}', name: 'show')]
     public function show(Category $category): Response
     {
-        $wishes = $category->getWishes()->getValues();
-
         return $this->render('category/show.html.twig', [
             'category' => $category,
-            'wishes' => $wishes,
         ]);
     }
 
-    #[Route('/edit/{id}', name: 'app_category_edit', methods: ['GET', 'POST'])]
+    #[Route('/edit/{id}', name: 'edit')]
     public function edit(Request $request, Category $category, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(CategoryType::class, $category);
@@ -63,7 +61,7 @@ class CategoryController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('category_list', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('category/edit.html.twig', [
@@ -72,8 +70,8 @@ class CategoryController extends AbstractController
         ]);
     }
 
-    #[Route('/delete/{id}', name: 'app_category_delete', methods: ['GET'])]
-    public function delete(Request $request, Category $category, EntityManagerInterface $entityManager): Response
+    #[Route('/delete/{id}', name: 'delete')]
+    public function delete(Category $category, EntityManagerInterface $entityManager): Response
     {
 
              if(count($category->getWishes()) === 0) {
@@ -84,6 +82,6 @@ class CategoryController extends AbstractController
              }
 
 
-        return $this->redirectToRoute('app_category_index');
+        return $this->redirectToRoute('category_list');
     }
 }

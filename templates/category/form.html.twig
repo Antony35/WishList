@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Category{% endblock %}
+
+{% block body %}
+    <div class="col-4 bg-white pt-3 d-flex flex-column">
+        <h5>Create new Category</h5>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button class="btn btn-info m-3 align-self-end">{{ button_label|default('Save') }}</button>
+        {{ form_end(form) }}
+    </div>
+    <a href="{{ path('category_list') }}">back to list</a>
+{% endblock %}
